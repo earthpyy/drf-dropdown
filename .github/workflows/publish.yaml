@@ -1,0 +1,32 @@
+name: Build & Publish to PyPi
+
+on:
+  push:
+    tags: [ v* ]
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install and configure Poetry
+      uses: snok/install-poetry@v1.1.10
+    - name: Install publishing tools
+      run: |
+        pip install poetry-dynamic-versioning
+    - name: Install dependencies
+      run: |
+        poetry install
+    - name: Build and publish package
+      env:
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+      run: |
+        poetry publish --build
+    - name: Create GitHub release
+      uses: ncipollo/release-action@v1
