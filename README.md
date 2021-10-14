@@ -2,14 +2,10 @@
 
 Dropdown population implementation for Django REST Framework
 
-## Requirements
-
-- Poetry
-
 ## Development
 
 ### Set Up
 
 ```bash
-poetry install
+make setup
 ```
