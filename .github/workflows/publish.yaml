@@ -16,7 +16,7 @@ jobs:
       with:
         python-version: 3.8
     - name: Install and configure Poetry
-      uses: snok/install-poetry@v1.1.10
+      uses: snok/install-poetry@v1
     - name: Install publishing tools
       run: |
         pip install poetry-dynamic-versioning
