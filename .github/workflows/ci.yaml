@@ -36,16 +36,16 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip
           restore-keys: ${{ runner.os }}-pip
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.0.0
-        with:
-          poetry-version: 1.1.11
       - name: Load cached venv
         id: cached-poetry-dependencies
         uses: actions/cache@v2
         with:
-          path: .venv
+          path: /home/runner/.cache/pypoetry/virtualenvs
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.11
       - name: Install dependencies
         run: |
           poetry install -n
