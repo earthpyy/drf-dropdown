@@ -1,9 +1,15 @@
 [tool.poetry]
 name = "django-rest-dropdown"
-version = "0.1.0"
+version = "0.0.0"
 description = "Dropdown population implementation for Django REST Framework"
 authors = ["Preeti Yuankrathok <preetisatit@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/earthpyy/django-rest-dropdown"
+keywords = ["django", "restframework", "dropdown"]
+packages = [
+    { include = "dropdown" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -14,6 +20,11 @@ django = "^3.1.0"
 pre-commit = "^2.15.0"
 pytest = "^6.2.5"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry.core.masonry.api"
