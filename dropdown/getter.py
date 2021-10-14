@@ -1,9 +1,6 @@
 import typing
 
-from django.apps import apps
-from django.utils.module_loading import import_string
-
-from dropdown import serializers, types
+from dropdown import registry, serializers, types
 
 
 class DropdownGetter:
@@ -14,23 +11,7 @@ class DropdownGetter:
         self.query = query or ''
         self.kwargs = kwargs
 
-        self.data = self._load_all_dropdown_data()
-
-    @staticmethod
-    def _load_all_dropdown_data() -> typing.Dict[str, typing.Callable]:
-        dropdown_data = {}
-        for app in apps.app_configs.values():
-            try:
-                data = import_string(f'{app.name}.dropdown.DROPDOWN')
-            except ImportError:
-                continue
-
-            if not isinstance(data, dict):
-                raise ValueError('DROPDOWN is not `dict` instance.')
-
-            dropdown_data.update(data)
-
-        return dropdown_data
+        self.data = registry.default_registry.registry
 
     def _get_dropdown_from_type(self, type_: str) -> typing.Tuple[typing.List[types.DropdownItem], int]:
         """

@@ -1,17 +1,18 @@
 import typing
 
 from django.conf import settings
+from django.core import exceptions
 from django.db import models
 
 from dropdown import types
 
 try:
     DROPDOWN_LIMIT = settings.DROPDOWN['LIMIT']
-except (AttributeError, IndexError):
+except (exceptions.ImproperlyConfigured, IndexError):
     DROPDOWN_LIMIT = 100
 
 
-def dropdown_items_from_model(
+def from_model(
     model,
     label_field: str,
     value_field='pk',
@@ -21,13 +22,14 @@ def dropdown_items_from_model(
 ) -> typing.Tuple[typing.List[types.DropdownItem], int]:
     """
     Get dropdown items from given model
-    :param model: model to get dropdown
-    :param label_field: name of field which will be label
-    :param value_field: name of field which will be value (default is `pk`)
-    :param q_filter: additional filter
-    :param no_limit: no items limit (overriding `LIMIT` in settings)
-    :param context_fields: additional fields to be appear in context in each dropdown item
-    :return: tuple of dropdown items and item count
+
+    @param model: model to get dropdown
+    @param label_field: name of field which will be label
+    @param value_field: name of field which will be value (default is `pk`)
+    @param q_filter: additional filter
+    @param no_limit: no items limit (overriding `LIMIT` in settings)
+    @param context_fields: additional fields to be appear in context in each dropdown item
+    @return: tuple of dropdown items and item count
     """
 
     # initial queryset
@@ -67,3 +69,13 @@ def dropdown_items_from_model(
             context={y: x[y] for y in (context_fields or [])},
         ) for x in result_list
     ], count
+
+
+def from_choices(choices: models.Choices) -> typing.Tuple[typing.List[types.DropdownItem], int]:
+    """
+    Get dropdown items from given model choices
+
+    @param choices: choices to get dropdown
+    """
+
+    return [types.DropdownItem(label=x.label, value=x.value) for x in sorted(choices, key=lambda x: x.label)]

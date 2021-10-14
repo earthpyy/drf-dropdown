@@ -1,11 +1,11 @@
-from dropdown import getter, serializers, types
+from dropdown import getter, serializers
 
 
 def get_dropdown_from_request(request):
     # validate params
     serializer = serializers.DropdownRequestSerializer(data=request.query_params, context={'request': request})
     serializer.is_valid(raise_exception=True)
-    request_data: types.DropdownRequest = serializer.save()
+    request_data = serializer.save()
 
     # getting data
     getter_class = getter.DropdownGetter(
