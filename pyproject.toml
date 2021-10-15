@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "django-rest-dropdown"
+name = "drf-dropdown"
 version = "0.0.0"
 description = "Dropdown population implementation for Django REST Framework"
 authors = ["Preeti Yuankrathok <preetisatit@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/earthpyy/django-rest-dropdown"
-keywords = ["django", "restframework", "dropdown"]
+repository = "https://github.com/earthpyy/drf-dropdown"
+keywords = ["django", "restframework", "drf", "dropdown"]
 packages = [
     { include = "dropdown" },
 ]
