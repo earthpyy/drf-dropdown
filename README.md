@@ -8,6 +8,31 @@
 
 Dropdown population implementation for Django REST Framework
 
+## Usage
+
+### Add `DropdownView` to API URL
+
+```python
+# urls.py
+import dropdown
+
+urlpatterns = [
+    ...
+    path('dropdown/', dropdown.DropdownView.as_view(), name='dropdown'),
+]
+```
+
+### Define new dropdown
+
+```python
+# someapp/dropdown.py
+import dropdown
+
+@dropdown.register
+def users(query='', **kwargs):
+    return dropdown.from_model(User, label_field='email')
+```
+
 ## Development
 
 ### Set Up
