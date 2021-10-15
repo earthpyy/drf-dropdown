@@ -4,6 +4,8 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/earthpyy/django-rest-dropdown/CI)
 ![PyPI](https://img.shields.io/pypi/v/django-rest-dropdown)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/django-rest-dropdown)
+![Django Version](https://img.shields.io/badge/django-3.0%20%7C%203.1%20%7C%203.2-blue)
+![Django REST Version](https://img.shields.io/badge/djangorestframework-3.11%20%7C%203.12-blue)
 ![Pre-commit Enabled](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)
 
 Dropdown population implementation for Django REST Framework
