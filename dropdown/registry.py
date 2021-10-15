@@ -36,3 +36,4 @@ class DropdownRegistry:
 
 
 default_registry = DropdownRegistry()
+register = default_registry.register

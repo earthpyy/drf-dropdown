@@ -1,6 +1,10 @@
 import typing
+from importlib import import_module
 
-from dropdown import registry, serializers, types
+from django.apps import apps
+
+from dropdown import serializers, types
+from dropdown.registry import default_registry
 
 
 class DropdownGetter:
@@ -11,7 +15,16 @@ class DropdownGetter:
         self.query = query or ''
         self.kwargs = kwargs
 
-        self.data = registry.default_registry.registry
+        self._load_all_dropdown_data()
+
+    def _load_all_dropdown_data(self):
+        for app in apps.app_configs.values():
+            try:
+                import_module(f'{app.name}.dropdown')
+            except ImportError:
+                continue
+
+        self.data = default_registry.registry
 
     def _get_dropdown_from_type(self, type_: str) -> typing.Tuple[typing.List[types.DropdownItem], int]:
         """
