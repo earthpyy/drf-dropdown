@@ -14,7 +14,7 @@ except (exceptions.ImproperlyConfigured, AttributeError, IndexError):
 
 def from_model(
     model,
-    label_field: str,
+    label_field: str = None,
     value_field='pk',
     q_filter: models.Q = None,
     no_limit=True,
@@ -24,7 +24,7 @@ def from_model(
     Get dropdown items from given model
 
     @param model: model to get dropdown
-    @param label_field: name of field which will be label
+    @param label_field: name of field which will be label (default is `__str__`)
     @param value_field: name of field which will be value (default is `pk`)
     @param q_filter: additional filter
     @param no_limit: no items limit (overriding `LIMIT` in settings)
@@ -48,7 +48,7 @@ def from_model(
     queryset = queryset.values(*values)
 
     # order
-    queryset = queryset.order_by(label_field)
+    queryset = queryset.order_by(label_field or value_field)
 
     # distinct
     queryset = queryset.distinct()
@@ -64,7 +64,7 @@ def from_model(
     # results
     return [
         types.DropdownItem(
-            label=x[label_field],
+            label=x[label_field] if label_field is not None else str(x),
             value=x[value_field],
             context={y: x[y] for y in (context_fields or [])},
         ) for x in result_list
