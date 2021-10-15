@@ -50,5 +50,7 @@ jobs:
         run: |
           poetry install -n
       - name: Test with pytest
+        env:
+          DJANGO_SETTINGS_MODULE: tests.settings
         run: |
           poetry run pytest
