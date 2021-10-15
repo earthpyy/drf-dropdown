@@ -53,14 +53,13 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: ${{ runner.os }}-pip
+          key: pip-${{ matrix.python }}
       - name: Load cached venv
         id: cached-poetry-dependencies
         uses: actions/cache@v2
         with:
           path: /home/runner/.cache/pypoetry/virtualenvs
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ matrix.python }}-${{ matrix.django }}-${{ matrix.django-rest }}-${{ hashFiles('**/poetry.lock') }}
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
