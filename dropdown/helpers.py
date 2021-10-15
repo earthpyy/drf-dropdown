@@ -8,7 +8,7 @@ from dropdown import types
 
 try:
     DROPDOWN_LIMIT = settings.DROPDOWN['LIMIT']
-except (exceptions.ImproperlyConfigured, IndexError):
+except (exceptions.ImproperlyConfigured, AttributeError, IndexError):
     DROPDOWN_LIMIT = 100
 
 
