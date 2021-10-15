@@ -66,9 +66,14 @@ jobs:
           poetry-version: "1.1.11"
       - name: Install dependencies
         run: |
-          poetry add -n --lock django@^${{ matrix.django }}.0
-          poetry add -n --lock djangorestframework@^${{ matrix.django-rest }}.0
           poetry install -n
+          poetry run pip install --no-input django~=${{ matrix.django }}.0
+          poetry run pip install --no-input djangorestframework~=${{ matrix.django-rest }}.0
+      - name: Verify package versions
+        run: |
+          python -V
+          poetry show django
+          poetry show djangorestframework
       - name: Test with pytest
         env:
           DJANGO_SETTINGS_MODULE: tests.settings
