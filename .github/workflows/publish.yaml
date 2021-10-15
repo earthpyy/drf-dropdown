@@ -19,8 +19,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip
-        restore-keys: ${{ runner.os }}-pip
+        key: pip
     - name: Install Poetry
       uses: abatilo/actions-poetry@v2.0.0
       with:
