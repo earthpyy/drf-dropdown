@@ -20,6 +20,7 @@ def from_model(
     q_filter: models.Q = None,
     no_limit=True,
     context_fields: typing.List[str] = None,
+    select_related: typing.List[str] = None,
 ) -> typing.Tuple[typing.List[types.DropdownItem], int]:
     """
     Get dropdown items from given model
@@ -30,6 +31,7 @@ def from_model(
     @param q_filter: additional filter
     @param no_limit: no items limit (overriding `LIMIT` in settings)
     @param context_fields: additional fields to be appear in context in each dropdown item
+    @param select_related: fields to select related
     @return: tuple of dropdown items and item count
     """
     if context_fields is None:
@@ -37,6 +39,11 @@ def from_model(
 
     # initial queryset
     queryset = model.objects.all()
+
+    # select related
+    # NOTE: prefetch related is not supported
+    if select_related is not None:
+        queryset = queryset.select_related(*select_related)
 
     # filter
     if q_filter:
