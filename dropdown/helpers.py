@@ -1,10 +1,11 @@
+import operator
 import typing
 
 from django.conf import settings
 from django.core import exceptions
 from django.db import models
 
-from dropdown import types
+from dropdown import types, utils
 
 try:
     DROPDOWN_LIMIT = settings.DROPDOWN['LIMIT']
@@ -31,6 +32,8 @@ def from_model(
     @param context_fields: additional fields to be appear in context in each dropdown item
     @return: tuple of dropdown items and item count
     """
+    if context_fields is None:
+        context_fields = []
 
     # initial queryset
     queryset = model.objects.all()
@@ -39,16 +42,18 @@ def from_model(
     if q_filter:
         queryset = queryset.filter(q_filter)
 
-    # values
-    values = {value_field}
-    if label_field:
-        values.add(label_field)
-    for context_field in (context_fields or []):
-        values.add(context_field)
-    queryset = queryset.values(*values)
+    # only
+    if label_field is not None:
+        only_fields = [
+            utils.dot_to_relation(label_field),
+            utils.dot_to_relation(value_field),
+            *[utils.dot_to_relation(x) for x in context_fields],
+        ]
+        queryset = queryset.only(*only_fields)
 
     # order
-    queryset = queryset.order_by(label_field or value_field)
+    order_by = label_field or value_field
+    queryset = queryset.order_by(utils.dot_to_relation(order_by))
 
     # distinct
     queryset = queryset.distinct()
@@ -64,9 +69,9 @@ def from_model(
     # results
     return [
         types.DropdownItem(
-            label=x[label_field] if label_field is not None else str(x),
-            value=x[value_field],
-            context={y: x[y] for y in (context_fields or [])},
+            label=operator.attrgetter(label_field)(x) if label_field is not None else str(x),
+            value=operator.attrgetter(value_field)(x),
+            context={y: operator.attrgetter(y)(x) for y in (context_fields)},
         ) for x in result_list
     ], count
 
