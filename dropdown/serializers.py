@@ -1,15 +1,15 @@
 import typing
 
-from rest_framework import serializers
+from rest_framework import serializers as rest_serializers
 
 from dropdown import types
 
 
-class DropdownRequestSerializer(serializers.Serializer):
+class DropdownRequestSerializer(rest_serializers.Serializer):
     """Serializer for deserialize dropdown request"""
 
-    type = serializers.CharField()
-    query = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    type = rest_serializers.CharField()
+    query = rest_serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     def validate_type(self, value: str) -> typing.List[str]:
         return value.split(',')
@@ -17,7 +17,7 @@ class DropdownRequestSerializer(serializers.Serializer):
     def validate(self, attrs):
         # split types
         if attrs.get('query') and len(attrs['type']) > 1:
-            raise serializers.ValidationError({'query': 'No query string allowed when using multiple types.'})
+            raise rest_serializers.ValidationError({'query': 'No query string allowed when using multiple types.'})
 
         return attrs
 
@@ -33,12 +33,12 @@ class DropdownRequestSerializer(serializers.Serializer):
         return {**validated_data, 'kwargs': kwargs}
 
 
-class DropdownItemSerializer(serializers.Serializer):
+class DropdownItemSerializer(rest_serializers.Serializer):
     """Serializer for serialize dropdown items"""
 
-    label = serializers.CharField()
-    value = serializers.SerializerMethodField(method_name='get_value_')
-    context = serializers.SerializerMethodField()
+    label = rest_serializers.CharField()
+    value = rest_serializers.SerializerMethodField(method_name='get_value_')
+    context = rest_serializers.SerializerMethodField()
 
     @staticmethod
     def get_value_(obj: types.DropdownItem):
