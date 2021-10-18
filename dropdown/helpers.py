@@ -38,6 +38,20 @@ def from_model(
     # initial queryset
     queryset = model.objects.all()
 
+    # select related
+    # NOTE: prefetch related is not supported
+    related_items = [
+        utils.extract_select_related(label_field) if label_field is not None else None,
+        utils.extract_select_related(value_field),
+        *[
+            utils.extract_select_related(x)
+            for x in context_fields
+        ],
+    ]
+    related_items = list(filter(lambda x: x is not None, related_items))
+    if related_items:
+        queryset = queryset.select_related(*related_items)
+
     # filter
     if q_filter:
         queryset = queryset.filter(q_filter)
