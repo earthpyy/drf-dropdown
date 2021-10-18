@@ -2,6 +2,7 @@ import typing
 from importlib import import_module
 
 from django.apps import apps
+from rest_framework import serializers as rest_serializers
 
 from dropdown import serializers, types
 from dropdown.registry import default_registry
@@ -33,11 +34,8 @@ class DropdownGetter:
         @return: list of dropdown items and total amount of items
         """
         data = self.data.get(type_)
-        if not data:
-            raise ValueError(f'No data found for type \'{type_}\'.')
-
-        if not callable(data):
-            raise ValueError('Data is invalid.')
+        if data is None:
+            raise rest_serializers.ValidationError(f'No data found for type \'{type_}\'.')
 
         res = data(query=self.query, **self.kwargs)
 
