@@ -90,7 +90,4 @@ def from_choices(choices: models.Choices) -> typing.Tuple[typing.List[types.Drop
     @param choices: choices to get dropdown
     """
 
-    return utils.remove_duplication(
-        types.DropdownItem(label=x.label, value=x.value)
-        for x in sorted(choices, key=lambda x: x.label)
-    )
+    return utils.remove_duplication(types.DropdownItem(label=x.label, value=x.value) for x in sorted(choices, key=lambda x: x.label))
