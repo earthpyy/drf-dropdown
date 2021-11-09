@@ -74,13 +74,13 @@ def from_model(
         count = len(result_list)
 
     # results
-    return [
+    return utils.remove_duplication(
         types.DropdownItem(
             label=operator.attrgetter(label_field)(x) if label_field is not None else str(x),
             value=operator.attrgetter(value_field)(x),
             context={y: operator.attrgetter(y)(x) for y in (context_fields)},
         ) for x in result_list
-    ], count
+    ), count
 
 
 def from_choices(choices: models.Choices) -> typing.Tuple[typing.List[types.DropdownItem], int]:
@@ -90,4 +90,7 @@ def from_choices(choices: models.Choices) -> typing.Tuple[typing.List[types.Drop
     @param choices: choices to get dropdown
     """
 
-    return [types.DropdownItem(label=x.label, value=x.value) for x in sorted(choices, key=lambda x: x.label)]
+    return utils.remove_duplication(
+        types.DropdownItem(label=x.label, value=x.value)
+        for x in sorted(choices, key=lambda x: x.label)
+    )
