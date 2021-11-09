@@ -10,7 +10,7 @@ class DropdownItem:
         self.context = context or {}
 
     def __eq__(self, o: object) -> bool:
-        return self.value == o.value and self.label == o.label and self.context == self.context
+        return self.value == o.value and self.label == o.label
 
     def __hash__(self) -> int:
-        return hash((self.value, self.label, self.context))
+        return hash((self.value, self.label))
