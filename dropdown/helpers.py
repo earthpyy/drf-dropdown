@@ -1,4 +1,3 @@
-import operator
 import typing
 
 from django.conf import settings
@@ -21,6 +20,7 @@ def from_model(
     no_limit=True,
     context_fields: typing.List[str] = None,
     select_related: typing.List[str] = None,
+    allow_undefined_context=False,
 ) -> typing.Tuple[typing.List[types.DropdownItem], int]:
     """
     Get dropdown items from given model
@@ -32,6 +32,7 @@ def from_model(
     @param no_limit: no items limit (overriding `LIMIT` in settings)
     @param context_fields: additional fields to be appear in context in each dropdown item
     @param select_related: fields to select related
+    @param allow_undefined_context: allow any context field to be None if there is no attribute
     @return: tuple of dropdown items and item count
     """
     if context_fields is None:
@@ -76,9 +77,9 @@ def from_model(
     # results
     return utils.remove_duplication(
         types.DropdownItem(
-            label=operator.attrgetter(label_field)(x) if label_field is not None else str(x),
-            value=operator.attrgetter(value_field)(x),
-            context={y: operator.attrgetter(y)(x) for y in (context_fields)},
+            label=utils.attrgetter(x, label_field) if label_field is not None else str(x),
+            value=utils.attrgetter(x, value_field),
+            context={y: utils.attrgetter(x, y, raise_exception=not allow_undefined_context) for y in (context_fields)},
         ) for x in result_list
     ), count
 
